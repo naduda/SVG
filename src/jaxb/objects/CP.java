@@ -15,7 +15,7 @@ public class CP {
 	
 	@Override
 	public String toString() {
-		return nameU;
+		return getVal();
 	}
 
 	public String getNameU() {
@@ -35,6 +35,9 @@ public class CP {
 	}
 
 	public String getVal() {
+		if (val != null && val.toLowerCase().startsWith("vt")) {
+			return val.substring(val.indexOf("(") + 1, val.indexOf(")"));
+		}
 		return val;
 	}
 

@@ -157,6 +157,14 @@ public abstract class AClassSVG {
 			case "stroke-linejoin":
 				sh.setStrokeLineJoin(StrokeLineJoin.valueOf(command[1].toUpperCase()));
 				break;
+			case "stroke-dasharray":
+				double d = 0;
+				StringTokenizer da = new StringTokenizer(command[1], ",");
+				while (da.hasMoreElements()) {
+					d = Double.parseDouble(da.nextElement().toString());
+					sh.getStrokeDashArray().add(d);
+				}				
+				break;
 			case "fill":
 				if (command[1].equals("none")) {
 					sh.setFill(Color.TRANSPARENT);

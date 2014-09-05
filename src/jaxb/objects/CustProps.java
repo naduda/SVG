@@ -1,6 +1,7 @@
 package jaxb.objects;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -19,4 +20,11 @@ public class CustProps {
 		this.customProps = customProps;
 	}
 	
+	public CP getCPbyName(String name) {
+		List<CP> ls = customProps.stream().filter(f -> f.getLbl().equals(name)).collect(Collectors.toList());
+		if (ls.size() > 0) {
+			return ls.get(0);
+		}
+		return null;
+	}
 }

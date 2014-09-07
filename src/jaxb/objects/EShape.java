@@ -6,17 +6,12 @@ import java.io.FileReader;
 import java.util.HashMap;
 
 import javax.script.Invocable;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
 import javafx.scene.Group;
 import jaxb.Convert;
 
 public class EShape extends AShape {
-	
-	//private ScriptEngineManager manager = null; //new ScriptEngineManager();
-	private ScriptEngine engine = null; //Convert.manager.getEngineByName("JavaScript");
 	
 	public enum typeSignalRef {
 		 TI(1), TS(2), TU(3);
@@ -57,26 +52,21 @@ public class EShape extends AShape {
 	}
 
 	@Override
-	public void onDoubleClick() {		
+	public void onDoubleClick() {
+		double start = System.currentTimeMillis();
 		if (custProps != null && custProps.get("Name") != null) {
 			String sName = custProps.get("Name");
 			
 			if (sName.startsWith("DisConnector") || sName.startsWith("Breaker")) {
-				engine = Convert.manager.getEngineByName("JavaScript");
-				engine.put("sh", this);
 				try {
-					engine.eval(new FileReader(new File("d:/"+ sName.substring(0, sName.indexOf(".")) +".js")));
-				} catch (FileNotFoundException | ScriptException e) {
-					System.out.println("File not found");
+					Convert.engine.eval(new FileReader(new File("d:/"+ sName.substring(0, sName.indexOf(".")) +".js")));
+					Invocable inv = (Invocable) Convert.engine;
+		            inv.invokeFunction("dblClick", this );
+				} catch (FileNotFoundException | ScriptException | NoSuchMethodException e) {
+					System.out.println("Script not found");
 				}
 			}
 		}
-		
-    	try {
-    		Invocable inv = (Invocable) engine;
-            inv.invokeFunction("dblClick", "0" );
-		} catch (Exception e) {
-			System.out.println("script not found");
-		}
+    	System.out.println(System.currentTimeMillis() - start);
 	}
 }

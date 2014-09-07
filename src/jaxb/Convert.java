@@ -1,9 +1,7 @@
 package jaxb;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -16,7 +14,6 @@ import jaxb.objects.EShape;
 import jaxb.objects.G;
 import jaxb.objects.SVG;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
 
 public class Convert extends Application {
@@ -58,29 +55,14 @@ public class Convert extends Application {
 			}
 		}
 	}
-
-	@SuppressWarnings("unchecked")
+	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+		double start = System.currentTimeMillis();
 		EntityFromXML efx = new EntityFromXML();
 		svg = (SVG)efx.getObject("d:/01_4.svg", SVG.class);
 		
 		Node group = getFXgroup(svg.getG(), false);
-		
-		((Group)group).getChildren().forEach(c -> {
-			if (c instanceof Group) {
-				Group cg = (Group) c;
-				if (cg.getUserData() != null) {
-					HashMap<String, String> hm = (HashMap<String, String>) cg.getUserData();
-					Set<String> ks = hm.keySet();
-					for (Iterator<String> iterator = ks.iterator(); iterator.hasNext();) {
-						String key = (String) iterator.next();
-						//System.out.println(key + " / " + hm.get(key));
-					}
-					//System.out.println("**************************************");
-				}
-			}
-		});
 		
 		Group g = new Group();
 		g.getChildren().add(group);
@@ -91,6 +73,7 @@ public class Convert extends Application {
         
         primaryStage.setScene(new Scene(sp, 500, 500));
         primaryStage.show();
+        System.out.println(System.currentTimeMillis() - start);
 	}
 
 	public static SVG getSvg() {

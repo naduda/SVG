@@ -1,4 +1,4 @@
-package jaxb.objects;
+package svg2fx.svgObjects;
 
 import java.util.List;
 import java.util.stream.Collectors;

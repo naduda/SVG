@@ -1,4 +1,4 @@
-package jaxb.objects;
+package svg2fx.fxObjects;
 
 import java.util.StringTokenizer;
 
@@ -11,6 +11,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.util.Duration;
@@ -23,49 +24,46 @@ public abstract class AShape extends Group {
 	
 	private final Rectangle rect = new Rectangle();
 	
-	public AShape(boolean canSelecting) {
-		if (canSelecting) {
-			//Пунктирна лінія
-			rect.getStrokeDashArray().addAll(2d, 5d);
-			rect.setStrokeWidth(RECT_LINE_WIDTH);
-			rect.setFill(Color.TRANSPARENT);
-	
-			timeline.setCycleCount(Timeline.INDEFINITE);
-			timeline.setAutoReverse(true);
-			final KeyValue kv = new KeyValue(rect.strokeProperty(), Color.BLACK);
-			final KeyFrame kf = new KeyFrame(Duration.millis(500), kv);
-			timeline.getKeyFrames().add(kf);
-			
-			Duration maxTimeBetweenSequentialClicks = Duration.millis(MOUSE_DURATION_MILLS);
-	        PauseTransition clickTimer = new PauseTransition(maxTimeBetweenSequentialClicks);
-	        final IntegerProperty sequentialClickCount = new SimpleIntegerProperty(0);
-	        clickTimer.setOnFinished(event -> {
-	            int count = sequentialClickCount.get();
-	            if (count == 2) {
-	            	onDoubleClick();
-	            }
-	
-	            sequentialClickCount.set(0);
-	        });
-	        
-		    setOnMouseClicked(event -> {
-		    	setSelection(true);
-		    	sequentialClickCount.set(sequentialClickCount.get() + 1);
-	            clickTimer.playFromStart();
-			});
-		}
+	public AShape() {
+		//Пунктирна лінія
+		rect.getStrokeDashArray().addAll(2d, 5d);
+		rect.setStrokeWidth(RECT_LINE_WIDTH);
+		rect.setFill(Color.TRANSPARENT);
+
+		timeline.setCycleCount(Timeline.INDEFINITE);
+		timeline.setAutoReverse(true);
+		final KeyValue kv = new KeyValue(rect.strokeProperty(), Color.BLACK);
+		final KeyFrame kf = new KeyFrame(Duration.millis(500), kv);
+		timeline.getKeyFrames().add(kf);
+		
+		Duration maxTimeBetweenSequentialClicks = Duration.millis(MOUSE_DURATION_MILLS);
+        PauseTransition clickTimer = new PauseTransition(maxTimeBetweenSequentialClicks);
+        final IntegerProperty sequentialClickCount = new SimpleIntegerProperty(0);
+        clickTimer.setOnFinished(event -> {
+            int count = sequentialClickCount.get();
+            if (count == 2) {
+            	onDoubleClick();
+            }
+
+            sequentialClickCount.set(0);
+        });
+        
+	    setOnMouseClicked(event -> {
+	    	setSelection(true);
+	    	sequentialClickCount.set(sequentialClickCount.get() + 1);
+            clickTimer.playFromStart();
+		});
 	}
 			
-	public AShape(Node g, boolean canSelecting) {		
-		this(canSelecting);
+	public AShape(Node g) {		
+		this();
 		
-		if (canSelecting) {
-			rect.setX(g.getBoundsInLocal().getMinX());
-			rect.setY(g.getBoundsInLocal().getMinY());
-			rect.setWidth(g.getBoundsInLocal().getWidth());
-			rect.setHeight(g.getBoundsInLocal().getHeight());
-			((Group) g).getChildren().add(rect);		
-		}
+		rect.setX(g.getBoundsInLocal().getMinX());
+		rect.setY(g.getBoundsInLocal().getMinY());
+		rect.setWidth(g.getBoundsInLocal().getWidth());
+		rect.setHeight(g.getBoundsInLocal().getHeight());
+		((Group) g).getChildren().add(rect);
+			
 		getChildren().add(g);
 	}
 	
@@ -91,15 +89,15 @@ public abstract class AShape extends Group {
 	
 	public abstract void onDoubleClick();
 	
-	public void rotate(Node n, double deg) {
+	public void rotate(Shape n, double deg) {
 		while (Math.abs(deg) > 180) {
 			deg = deg > 0 ? deg - 360 : deg + 360;
 		}
 		n.setRotate(-deg);
 
 		double adeg = Math.abs(deg);
-		double sWidth = n.getBoundsInLocal().getWidth();
-		double sHeight = n.getBoundsInLocal().getHeight();
+		double sWidth = n.getBoundsInLocal().getWidth() ;
+		double sHeight = n.getBoundsInLocal().getHeight() ;
 		
 		double sinD = Math.abs(Math.sin(Math.toRadians(adeg)));
 		double cosD = Math.abs(Math.cos(Math.toRadians(adeg)));
@@ -115,11 +113,7 @@ public abstract class AShape extends Group {
 		n.setTranslateY(deg > 0 ? -sY : sY);
 	}
 	
-	public void setColor(Shape sh, String color) {
-		sh.setStroke(Color.valueOf(color.toUpperCase()));
-	}
-	
-	public void setFill(Shape sh, String color) {
-		sh.setFill(Color.valueOf(color.toUpperCase()));
+	public Paint getColorByName(String colorName) {
+		return Color.valueOf(colorName.toUpperCase());
 	}
 }

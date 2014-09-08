@@ -1,4 +1,4 @@
-package jaxb.objects;
+package svg2fx.svgObjects;
 
 import java.util.HashMap;
 import java.util.StringTokenizer;

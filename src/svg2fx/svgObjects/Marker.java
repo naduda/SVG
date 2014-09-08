@@ -1,4 +1,4 @@
-package jaxb.objects;
+package svg2fx.svgObjects;
 
 import javafx.scene.Node;
 

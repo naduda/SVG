@@ -1,4 +1,4 @@
-package jaxb.objects;
+package svg2fx.fxObjects;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -8,8 +8,8 @@ import java.util.HashMap;
 import javax.script.Invocable;
 import javax.script.ScriptException;
 
+import svg2fx.Convert;
 import javafx.scene.Group;
-import jaxb.Convert;
 
 public class EShape extends AShape {
 	
@@ -29,14 +29,10 @@ public class EShape extends AShape {
 	
 	public boolean isON = false;
 	
-	public EShape(boolean canSelecting) {
-		super(canSelecting);
-	}
-	
 	private HashMap<String, String> custProps;
 	@SuppressWarnings("unchecked")
-	public EShape(Group g, boolean canSelecting) {
-		super(g, canSelecting);
+	public EShape(Group g) {
+		super(g);
 		
 		if (g.getUserData() != null) {
 			custProps = (HashMap<String, String>) g.getUserData();

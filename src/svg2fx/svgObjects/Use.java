@@ -1,4 +1,4 @@
-package jaxb.objects;
+package svg2fx.svgObjects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

@@ -1,4 +1,4 @@
-package jaxb;
+package svg2fx;
 
 import java.io.File;
 import java.io.FileReader;
